@@ -22,6 +22,7 @@ async function run() {
     try {
         const advertisementsCollection = client.db('usedHandResale').collection('advertisedItems');
         const categoriesCollection = client.db('usedHandResale').collection('categories');
+        const phonesCollection = client.db('usedHandResale').collection('phoneListings');
 
         // Use Aggregate to query multiple collection and then merge data
 
@@ -36,7 +37,25 @@ async function run() {
             res.send(options);
         });
 
+        app.get('/categories/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {category_id: id};
+            const categoryItems = await categoriesCollection.findOne(query);
+            res.send(categoryItems);
+        })
 
+        app.get('/phone-listings', async (req, res) => {
+             const query = {};
+            const phones = await phonesCollection.find(query).toArray();
+            res.send(phones);
+        });
+
+        app.get('/phone-listings/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {category_id: id};
+            const phones = await phonesCollection.find(query).toArray();
+            res.send(phones);
+        });
 
     }
     finally {
